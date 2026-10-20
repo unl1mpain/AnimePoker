@@ -1,0 +1,4 @@
+repository "AnimePoker/AnimePoker@10171655807704@cloud"
+  path "/"
+    br "/main"
+    co "/main"
