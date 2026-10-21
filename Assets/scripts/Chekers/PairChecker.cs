@@ -34,7 +34,6 @@ public class PairChecker : ICombinationChecker
         var tiebreakers = new List<Rank> { pairRank };
         tiebreakers.AddRange(kickers);
 
-        var result = new CombinationResult(CombinationCategory.Pair, tiebreakers);
-        return result;
+        return new CombinationResult(CombinationCategory.Pair, tiebreakers);
     }
 }
