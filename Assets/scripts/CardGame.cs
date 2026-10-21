@@ -23,8 +23,9 @@ public class CardGame : MonoBehaviour
         outputCurrentHand.text = gameHand.ShowHand();
         outputPlayerHand.text = playerHand.ShowHand();
 
-        Debug.Log(playerHand.ToSafeString());
+        //Debug.Log(playerHand.ToSafeString());
         //Debug.Log(gameHand.ShowHand());
+        TestThreePairs();
     }
 
     private void Update()
@@ -79,7 +80,7 @@ public class CardGame : MonoBehaviour
 
         if (result == null)
         {
-            Debug.Log("Пары нет");
+            Debug.Log("Нет комбинации");
             return;
         }
 
@@ -90,21 +91,21 @@ public class CardGame : MonoBehaviour
     private void TestThreePairs()
     {
         var hand = new List<Card>
-    {
-        new Card(Suit.Spades, Rank.King),
-        new Card(Suit.Hearts, Rank.King)
-    };
+        {
+            new Card(Suit.Spades, Rank.Six),
+            new Card(Suit.Hearts, Rank.Seven)
+        };
 
         var table = new List<Card>
-    {
-        new Card(Suit.Spades, Rank.Nine),
-        new Card(Suit.Hearts, Rank.Nine),
-        new Card(Suit.Clubs, Rank.Four),
-        new Card(Suit.Diamonds, Rank.Four),
-        new Card(Suit.Clubs, Rank.Ace)
-    };
+        {
+            new Card(Suit.Clubs, Rank.Seven),
+            new Card(Suit.Hearts, Rank.King),
+            new Card(Suit.Clubs, Rank.Nine),
+            new Card(Suit.Diamonds, Rank.Five),
+            new Card(Suit.Clubs, Rank.Queen)
+        };
 
-        var result = new PairChecker().Check(hand, table);
+        var result = new StraightChecker().Check(hand, table);
         Debug.Log(result == null ? "null" : $"{result.Category}: {string.Join(", ", result.Tiebreakers)}");
     }
 }
