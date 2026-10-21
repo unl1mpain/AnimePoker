@@ -10,7 +10,6 @@ public class PlayerHand : Hand
         if (hand.Count < 2) 
         {
             hand.Add(card);
-            Debug.Log(card);
         }
     }
 }
