@@ -92,20 +92,20 @@ public class CardGame : MonoBehaviour
     {
         var hand = new List<Card>
         {
-            new Card(Suit.Spades, Rank.Ace),
+            new Card(Suit.Spades, Rank.Seven),
             new Card(Suit.Spades, Rank.King)
         };
 
         var table = new List<Card>
         {
-            new Card(Suit.Clubs, Rank.Nine),
-            new Card(Suit.Hearts, Rank.Five),
-            new Card(Suit.Hearts, Rank.Four),
-            new Card(Suit.Hearts, Rank.Three),
-            new Card(Suit.Hearts, Rank.Two)
+            new Card(Suit.Clubs, Rank.Seven),
+            new Card(Suit.Hearts, Rank.Seven),
+            new Card(Suit.Hearts, Rank.Two),
+            new Card(Suit.Hearts, Rank.Jack),
+            new Card(Suit.Hearts, Rank.Nine)
         };
 
-        var result = new FlushChecker().Check(hand, table);
+        var result = new FullHouseChecker().Check(hand, table);
         Debug.Log(result == null ? "null" : $"{result.Category}: {string.Join(", ", result.Tiebreakers)}");
     }
 }
