@@ -1,31 +1,30 @@
 using UnityEngine;
 using TMPro;
-using System.Text;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 
 public class CardGame : MonoBehaviour
 {
     [SerializeField] private TMP_Text outputCurrentHand;
     [SerializeField] private TMP_Text outputPlayerHand;
+    [SerializeField] private TMP_Text outputEnemyHand;
     private Deck currentDeck;
     private Hand gameHand;
     private PlayerHand playerHand;
+    private PlayerHand enemyHand;
 
     private void Start()
     {
         currentDeck = new Deck();
         gameHand = new Hand();
         playerHand = new PlayerHand();
+        enemyHand = new PlayerHand();
 
-        StartDeal(currentDeck, gameHand, playerHand);
+        StartDeal(currentDeck, gameHand, playerHand, enemyHand);
         outputCurrentHand.text = gameHand.ShowHand();
         outputPlayerHand.text = playerHand.ShowHand();
 
-        //Debug.Log(playerHand.ToSafeString());
-        //Debug.Log(gameHand.ShowHand());
-        TestThreePairs();
+        //TestThreePairs();
     }
 
     private void Update()
@@ -42,13 +41,14 @@ public class CardGame : MonoBehaviour
         {
             gameHand.ClearHand();
             playerHand.ClearHand();
-           
+            enemyHand.ClearHand();
+            currentDeck.Reset();
+            StartDeal(currentDeck, gameHand, playerHand, enemyHand);
         }
 
         if (Keyboard.current.gKey.wasPressedThisFrame) // начало новой
         {
-            currentDeck.Reset();
-            StartDeal(currentDeck, gameHand, playerHand);
+            
             
         }
 
@@ -58,10 +58,12 @@ public class CardGame : MonoBehaviour
         }
     }
 
-    private void StartDeal(Deck deck, Hand gameHand, PlayerHand playerHand) //первоначальная раздача
+    private void StartDeal(Deck deck, Hand gameHand, PlayerHand playerHand, PlayerHand enemyHand) //первоначальная раздача
     {
         playerHand.AddCard(deck.Draw());
         playerHand.AddCard(deck.Draw());
+        enemyHand.AddCard(deck.Draw());
+        enemyHand.AddCard(deck.Draw());
         gameHand.AddCard(deck.Draw());
         gameHand.AddCard(deck.Draw());
         gameHand.AddCard(deck.Draw());
@@ -71,33 +73,51 @@ public class CardGame : MonoBehaviour
     {
         outputCurrentHand.text = gameHand.ShowHand();
         outputPlayerHand.text = playerHand.ShowHand();
+        outputEnemyHand.text = enemyHand.ShowHand();
     }
 
     private void CheckCombination()
     {
-        var checker = new HighCardChecker();
-        var result = checker.Check(playerHand.GetHand(), gameHand.GetHand());
+        var evaluator = new HandEvaluator();
+        var result1 = evaluator.Evaluate(playerHand.GetHand(), gameHand.GetHand());
 
-        if (result == null)
+        var result2 = evaluator.Evaluate(enemyHand.GetHand(), gameHand.GetHand());
+        if (result1 == null || result2 == null)
         {
             Debug.Log("Нет комбинации");
             return;
         }
+        Debug.Log("Your combination:");
+        Debug.Log(result1.Category);
+        Debug.Log(string.Join(", ", result1.Tiebreakers));
 
-        Debug.Log(result.Category);
-        Debug.Log(string.Join(", ", result.Tiebreakers));
+        Debug.Log("Enemy combination:");
+        Debug.Log(result2.Category);
+        Debug.Log(string.Join(", ", result2.Tiebreakers));
+
+        Debug.Log("Winner is:");
+        var a = result1.CompareTo(result2);
+        if (a < 0)
+        {
+            Debug.Log("enemy :(");
+        }
+        else if (a > 0)
+        {
+            Debug.Log("YOUUU!!!!!!");
+        }
+        else 
+        {
+            Debug.Log("WTF EQUAL");
+        }
+
     }
 
     private void TestThreePairs()
     {
-        var hand = new List<Card>
+        var cards = new List<Card>
         {
             new Card(Suit.Hearts, Rank.Ace),
-            new Card(Suit.Hearts, Rank.King)
-        };
-
-        var table = new List<Card>
-        {
+            new Card(Suit.Hearts, Rank.King),
             new Card(Suit.Clubs, Rank.Queen),
             new Card(Suit.Hearts, Rank.Jack),
             new Card(Suit.Hearts, Rank.Ten),
@@ -105,7 +125,7 @@ public class CardGame : MonoBehaviour
             new Card(Suit.Spades, Rank.Two)
         };
 
-        var result = new StraightFlushChecker().Check(hand, table);
+        var result = new StraightFlushChecker().Check(cards);
         Debug.Log(result == null ? "null" : $"{result.Category}: {string.Join(", ", result.Tiebreakers)}");
     }
 }
