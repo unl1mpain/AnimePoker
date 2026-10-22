@@ -3,6 +3,7 @@ using UnityEngine;
 
 public interface ICombinationChecker
 {
-    CombinationResult Check(List<Card> hand, List<Card> table);
+    CombinationResult Check(IReadOnlyList<Card> cards);
     string CombinationName { get; } 
 }
+                                                                    
