@@ -6,15 +6,8 @@ public class FlushChecker : ICombinationChecker
 {
     public string CombinationName => "Flush";
 
-    public CombinationResult Check(List<Card> hand, List<Card> table)
+    public CombinationResult Check(IReadOnlyList<Card> cards)
     {
-        List<Card> cards = new List<Card>(table);
-
-        foreach (Card card in hand)
-        {
-            cards.Add(card);
-        }
-
         var suitedCards = cards
         .GroupBy(c => c.Suit)
         .FirstOrDefault(g => g.Count() >= 5);

@@ -5,15 +5,8 @@ public class StraightChecker : ICombinationChecker
 {
     public string CombinationName => "Straight";
 
-    public CombinationResult Check(List<Card> hand, List<Card> table)
+    public CombinationResult Check(IReadOnlyList<Card> cards)
     {
-        List<Card> cards = new List<Card>(table);
-
-        foreach (Card card in hand)
-        {
-            cards.Add(card);
-        }
-
         var sortedRanks = cards
         .Select(c => c.Rank)
         .Distinct()

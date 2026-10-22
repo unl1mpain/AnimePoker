@@ -5,15 +5,8 @@ public class StraightFlushChecker : ICombinationChecker
 {
     public string CombinationName => "StraightFlush";
 
-    public CombinationResult Check(List<Card> hand, List<Card> table)
+    public CombinationResult Check(IReadOnlyList<Card> cards)
     {
-        List<Card> cards = new List<Card>(table);
-
-        foreach (Card card in hand)
-        {
-            cards.Add(card);
-        }
-
         var suitedCards = cards
         .GroupBy(c => c.Suit)
         .FirstOrDefault(g => g.Count() >= 5);
@@ -21,7 +14,7 @@ public class StraightFlushChecker : ICombinationChecker
         if (suitedCards == null)
             return null;
 
-        var straightResult = new StraightChecker().Check(suitedCards.ToList(), new List<Card>());
+        var straightResult = new StraightChecker().Check(suitedCards.ToList());
         if (straightResult == null)
         {
             return null;

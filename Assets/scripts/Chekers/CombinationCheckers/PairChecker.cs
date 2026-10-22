@@ -5,16 +5,9 @@ public class PairChecker : ICombinationChecker
 {
     public string CombinationName => "Pair";
 
-    public CombinationResult Check(List<Card> hand, List<Card> table)
+    public CombinationResult Check(IReadOnlyList<Card> cards)
     {
-        List<Card> cards = new List<Card>(table);
-        
-        foreach (Card card in hand)
-        {
-            cards.Add(card);
-        }
-
-        var pairRanks = cards // list of pairs sorted by their count   
+        var pairRanks = cards 
         .GroupBy(c => c.Rank)
         .Where(g => g.Count() == 2)
         .Select(g => g.Key)
@@ -25,7 +18,7 @@ public class PairChecker : ICombinationChecker
 
         Rank pairRank = pairRanks.Max();
 
-        var kickers = cards // list of kickers ordered by descending
+        var kickers = cards 
         .Where(c => c.Rank != pairRank)
         .Select(c => c.Rank)
         .OrderByDescending(r => r)

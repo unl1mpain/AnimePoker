@@ -5,15 +5,8 @@ public class FourOfAKindChecker : ICombinationChecker
 {
     public string CombinationName => "FourOfAKind";
 
-    public CombinationResult Check(List<Card> hand, List<Card> table)
+    public CombinationResult Check(IReadOnlyList<Card> cards)
     {
-        List<Card> cards = new List<Card>(table);
-
-        foreach (Card card in hand)
-        {
-            cards.Add(card);
-        }
-
         var quadRanks = cards
         .GroupBy(c => c.Rank)
         .Where(g => g.Count() == 4)

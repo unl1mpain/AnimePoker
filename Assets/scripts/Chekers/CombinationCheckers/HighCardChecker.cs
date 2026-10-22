@@ -5,16 +5,9 @@ public class HighCardChecker : ICombinationChecker
 {
     public string CombinationName => "HighCard";
 
-    public CombinationResult Check(List<Card> hand, List<Card> table)
+    public CombinationResult Check(IReadOnlyList<Card> cards)
     {
-        List<Card> cards = new List<Card>(table);
-
-        foreach (Card card in hand)
-        {
-            cards.Add(card);
-        }
-
-        var tiebreakers = cards // list of kickers ordered by 
+        var tiebreakers = cards
         .Select(c => c.Rank)
         .OrderByDescending(r => r)
         .Take(5)
