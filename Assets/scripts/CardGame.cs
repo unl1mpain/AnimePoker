@@ -8,21 +8,15 @@ public class CardGame : MonoBehaviour
     [SerializeField] private TMP_Text outputCurrentHand;
     [SerializeField] private TMP_Text outputPlayerHand;
     [SerializeField] private TMP_Text outputEnemyHand;
-    private Deck currentDeck;
-    private Hand gameHand;
-    private PlayerHand playerHand;
-    private PlayerHand enemyHand;
+
+    private GameSession gameSession;
 
     private void Start()
     {
-        currentDeck = new Deck();
-        gameHand = new Hand();
-        playerHand = new PlayerHand();
-        enemyHand = new PlayerHand();
+        gameSession = new GameSession();
 
-        NewDeal();
-        outputCurrentHand.text = gameHand.ShowHand();
-        outputPlayerHand.text = playerHand.ShowHand();
+        //outputCurrentHand.text = gameHand.ShowHand();
+        //outputPlayerHand.text = playerHand.ShowHand();
 
         //TestThreePairs();
     }
@@ -31,80 +25,30 @@ public class CardGame : MonoBehaviour
     {
         TextUpdate();
 
-        if (Keyboard.current.eKey.wasPressedThisFrame && !gameHand.IsFull) // draw
+        if (Keyboard.current.eKey.wasPressedThisFrame) // draw
         {
-            gameHand.AddCard(currentDeck.Draw());
+            gameSession.DrawCard();        
         }
 
         if (Keyboard.current.fKey.wasPressedThisFrame)  // очистка партии и старт новой
         {
-            NewDeal();
+            gameSession.NewDeal();
         }
 
         if (Keyboard.current.hKey.wasPressedThisFrame) // проверка комбинации
         {
-            CheckCombination();
+            
         }
-    }
-
-    private void NewDeal() //первоначальная раздача
-    {
-        gameHand.ClearHand();
-        playerHand.ClearHand();
-        enemyHand.ClearHand();
-        currentDeck.Reset();
-
-        playerHand.AddCard(currentDeck.Draw());
-        playerHand.AddCard(currentDeck.Draw());
-        enemyHand.AddCard(currentDeck.Draw());
-        enemyHand.AddCard(currentDeck.Draw());
-        gameHand.AddCard(currentDeck.Draw());
-        gameHand.AddCard(currentDeck.Draw());
-        gameHand.AddCard(currentDeck.Draw());
     }
 
     private void TextUpdate() 
     {
-        outputCurrentHand.text = gameHand.ShowHand();
-        outputPlayerHand.text = playerHand.ShowHand();
-        outputEnemyHand.text = enemyHand.ShowHand();
+        outputCurrentHand.text = gameSession.Board.ShowHand();
+        outputPlayerHand.text = gameSession.PlayerHand.ShowHand();
+        outputEnemyHand.text = gameSession.EnemyHand.ShowHand();
     }
 
-    private void CheckCombination()
-    {
-        var evaluator = new HandEvaluator();
-        var result1 = evaluator.Evaluate(playerHand.GetHand(), gameHand.GetHand());
-
-        var result2 = evaluator.Evaluate(enemyHand.GetHand(), gameHand.GetHand());
-        if (result1 == null || result2 == null)
-        {
-            Debug.Log("Нет комбинации");
-            return;
-        }
-        Debug.Log("Your combination:");
-        Debug.Log(result1.Category);
-        Debug.Log(string.Join(", ", result1.Tiebreakers));
-
-        Debug.Log("Enemy combination:");
-        Debug.Log(result2.Category);
-        Debug.Log(string.Join(", ", result2.Tiebreakers));
-
-        Debug.Log("Winner is:");
-        var a = result1.CompareTo(result2);
-        if (a < 0)
-        {
-            Debug.Log("enemy :(");
-        }
-        else if (a > 0)
-        {
-            Debug.Log("YOUUU!!!!!!");
-        }
-        else 
-        {
-            Debug.Log("WTF EQUAL");
-        }
-
-    }
+    
 
     private void TestThreePairs()
     {
