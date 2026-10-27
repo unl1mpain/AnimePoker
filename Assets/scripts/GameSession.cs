@@ -1,4 +1,4 @@
-
+using System;
 public class GameSession
 {
     private readonly Deck currentDeck;
@@ -6,6 +6,7 @@ public class GameSession
     public Hand Board { get; }
     public HoleCards PlayerHand { get; }
     public HoleCards EnemyHand { get; }
+    public event Action StateChanged;
 
     public GameSession()
     {
@@ -17,7 +18,7 @@ public class GameSession
         NewDeal();
     }
 
-    public void NewDeal() //первоначальная раздача
+    public void NewDeal() 
     {
         Board.ClearHand();
         PlayerHand.ClearHand();
@@ -31,12 +32,15 @@ public class GameSession
         Board.AddCard(currentDeck.Draw());
         Board.AddCard(currentDeck.Draw());
         Board.AddCard(currentDeck.Draw());
+
+        StateChanged?.Invoke();
     }
 
     public void DrawCard() 
     {
         if (Board.IsFull) return;
         Board.AddCard(currentDeck.Draw());
+        StateChanged?.Invoke();
     }
 
     public ShowdownResult ResolveShowdown()

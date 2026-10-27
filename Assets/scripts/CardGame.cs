@@ -14,16 +14,14 @@ public class CardGame : MonoBehaviour
     private void Start()
     {
         gameSession = new GameSession();
-
-
+        gameSession.StateChanged += TextUpdate;
+        TextUpdate();
 
         //TestThreePairs();
     }
 
     private void Update()
     {
-        TextUpdate();
-
         if (Keyboard.current.eKey.wasPressedThisFrame) // draw
         {
             gameSession.DrawCard();        
@@ -38,6 +36,11 @@ public class CardGame : MonoBehaviour
         {
             ShowdownOutput();
         }
+    }
+
+    private void OnDestroy()
+    {
+        gameSession.StateChanged -= TextUpdate;
     }
 
     private void TextUpdate() 
