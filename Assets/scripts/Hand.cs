@@ -1,13 +1,11 @@
-using NUnit.Framework;
 using System.Collections.Generic;
 using System.Text;
-using UnityEngine;
-using UnityEngine.Rendering;
 
 public class Hand
 {
     protected List<Card> hand = new List<Card>();
-    public bool IsFull => hand.Count >= 5;
+    protected virtual int MaxCards => 5;
+    public bool IsFull => hand.Count >= MaxCards;
 
     public virtual void AddCard(Card card)
     {

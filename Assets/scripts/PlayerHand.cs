@@ -1,14 +1,9 @@
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.XR;
-
 public class PlayerHand : Hand
 {
+    protected override int MaxCards => 2;
     public override void AddCard(Card card) 
     {
-        if (hand.Count < 2) 
-        {
-            hand.Add(card);
-        }
+        if (!IsFull) return;
+        hand.Add(card);
     }
 }
