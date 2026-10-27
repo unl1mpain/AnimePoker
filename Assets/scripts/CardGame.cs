@@ -15,8 +15,7 @@ public class CardGame : MonoBehaviour
     {
         gameSession = new GameSession();
 
-        //outputCurrentHand.text = gameHand.ShowHand();
-        //outputPlayerHand.text = playerHand.ShowHand();
+
 
         //TestThreePairs();
     }
