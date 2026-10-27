@@ -36,7 +36,7 @@ public class CardGame : MonoBehaviour
 
         if (Keyboard.current.hKey.wasPressedThisFrame) // проверка комбинации
         {
-            
+            ShowdownOutput();
         }
     }
 
@@ -47,7 +47,36 @@ public class CardGame : MonoBehaviour
         outputEnemyHand.text = gameSession.EnemyHand.ShowHand();
     }
 
-    
+    private void ShowdownOutput()
+    {
+        var showdownResult = gameSession.ResolveShowdown();
+        if (showdownResult == null)
+        {
+            Debug.Log("Нет комбинации");
+            return;
+        }
+        Debug.Log("Your combination:");
+        Debug.Log(showdownResult.PlayerResult.Category);
+        Debug.Log(string.Join(", ", showdownResult.PlayerResult.Tiebreakers));
+
+        Debug.Log("Enemy combination:");
+        Debug.Log(showdownResult.EnemyResult.Category);
+        Debug.Log(string.Join(", ", showdownResult.EnemyResult.Tiebreakers));
+
+        Debug.Log("Winner is:");
+        switch (showdownResult.Outcome)
+        {
+            case ResultType.PlayerWin:
+                Debug.Log("YOUUU!!!!!!");
+                break;
+            case ResultType.EnemyWin:
+                Debug.Log("enemy :(");
+                break;
+            case ResultType.Tie:
+                Debug.Log("WTF EQUAL");
+                break;
+        }
+    }
 
     private void TestThreePairs()
     {
