@@ -23,7 +23,6 @@ public class Deck
             foreach (Rank rank in ranks)
             {
                 cards.Add(new Card(suit, rank));
-                //debug.log(cards[cards.count - 1]); //вывод каждой созданной карты в деке
             }
         }
 
