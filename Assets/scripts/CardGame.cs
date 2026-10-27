@@ -20,7 +20,7 @@ public class CardGame : MonoBehaviour
         playerHand = new PlayerHand();
         enemyHand = new PlayerHand();
 
-        NewDeal(currentDeck, gameHand, playerHand, enemyHand);
+        NewDeal();
         outputCurrentHand.text = gameHand.ShowHand();
         outputPlayerHand.text = playerHand.ShowHand();
 
@@ -38,8 +38,7 @@ public class CardGame : MonoBehaviour
 
         if (Keyboard.current.fKey.wasPressedThisFrame)  // очистка партии и старт новой
         {
-            
-            NewDeal(currentDeck, gameHand, playerHand, enemyHand);
+            NewDeal();
         }
 
         if (Keyboard.current.hKey.wasPressedThisFrame) // проверка комбинации
@@ -48,20 +47,20 @@ public class CardGame : MonoBehaviour
         }
     }
 
-    private void NewDeal(Deck deck, Hand gameHand, PlayerHand playerHand, PlayerHand enemyHand) //первоначальная раздача
+    private void NewDeal() //первоначальная раздача
     {
         gameHand.ClearHand();
         playerHand.ClearHand();
         enemyHand.ClearHand();
         currentDeck.Reset();
 
-        playerHand.AddCard(deck.Draw());
-        playerHand.AddCard(deck.Draw());
-        enemyHand.AddCard(deck.Draw());
-        enemyHand.AddCard(deck.Draw());
-        gameHand.AddCard(deck.Draw());
-        gameHand.AddCard(deck.Draw());
-        gameHand.AddCard(deck.Draw());
+        playerHand.AddCard(currentDeck.Draw());
+        playerHand.AddCard(currentDeck.Draw());
+        enemyHand.AddCard(currentDeck.Draw());
+        enemyHand.AddCard(currentDeck.Draw());
+        gameHand.AddCard(currentDeck.Draw());
+        gameHand.AddCard(currentDeck.Draw());
+        gameHand.AddCard(currentDeck.Draw());
     }
 
     private void TextUpdate() 
