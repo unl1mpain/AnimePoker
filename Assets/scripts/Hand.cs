@@ -7,6 +7,7 @@ using UnityEngine.Rendering;
 public class Hand
 {
     protected List<Card> hand = new List<Card>();
+    public bool IsFull => hand.Count >= 5;
 
     public virtual void AddCard(Card card)
     {
